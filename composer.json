@@ -1,6 +1,7 @@
 {
   "name": "sendelius/db",
   "type": "library",
+  "license": "MIT",
   "authors": [
     {
       "name": "Sendelius",
