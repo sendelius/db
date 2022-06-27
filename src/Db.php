@@ -91,6 +91,14 @@ class Db{
 				$this->setData($newValues);
 				self::$whereKeyIndex = self::$whereKeyIndex+1;
 			}
+        }elseif(strtoupper($cond)=='NOT IN') {
+			if(is_array($value) AND count($value)>0){
+				$aKeys = array_keys($value);
+				$newValues = array_combine(preg_replace('/^/',':where_in_'.self::$whereKeyIndex.'_',$aKeys,1),$value);
+				$where = $key.' NOT IN('.implode(',',array_keys($newValues)).')';
+				$this->setData($newValues);
+				self::$whereKeyIndex = self::$whereKeyIndex+1;
+			}
 		}elseif(strtoupper($cond)=='BETWEEN'){
 			if(is_array($value) AND count($value)>0){
 				$aKeys = array_keys($value);
