@@ -70,7 +70,7 @@ class Db{
 		$this->group = null;
 		$this->order = null;
 		$this->limit = null;
-		$result = $this->sql->query($this->query,$this->data);
+		$result = $this->sql->sendQuery($this->query,$this->data);
 		$this->queryString = $result->queryString;
 		self::$lastQueryString = $result->queryString;
 		$this->executeResult = $this->sql->executeResult;

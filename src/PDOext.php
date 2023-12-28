@@ -17,7 +17,7 @@ class PDOext extends PDO{
 	public $driver = null;
 	public $executeResult;
 	public $executeData;
-	public function query($sql,array $data = array()){
+	public function sendQuery($sql,array $data = array()){
 		$sql = parent::prepare($sql);
 		$this->executeResult = $sql->execute($data);
 		$this->executeData = $data;
