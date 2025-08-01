@@ -36,8 +36,16 @@ class Db {
 
 	/**
 	 * подключение к базе
+	 * @param string $name
+	 * @param string $host
+	 * @param string $user
+	 * @param string $password
+	 * @param string $charset
+	 * @param string $driver
+	 * @param string $port
+	 * @return void
 	 */
-	public function __construct(string $name, string $host = 'localhost', string $user = '', string $password = '', string $charset = 'utf8mb4', string $driver = 'mysql', string $port = '') {
+	public function connect(string $name, string $host = 'localhost', string $user = '', string $password = '', string $charset = 'utf8mb4', string $driver = 'mysql', string $port = ''): void {
 		$driver = (in_array($driver, ['mysql', 'pgsql'])) ? $driver : 'mysql';
 		$options = ($driver === 'mysql') ? [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES " . $charset] : [];
 		try {
