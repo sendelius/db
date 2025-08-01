@@ -7,6 +7,7 @@
             "homepage": "https://sendelius.ru"
         }
     ],
+    "license": "MIT",
     "require": {
         "php": ">=8.3",
         "ext-pdo": "*"
