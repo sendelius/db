@@ -20,19 +20,19 @@ class Db {
 	 * префикс таблиц
 	 * @var string
 	 */
-	public string $tablePrefix;
+	public string $tablePrefix = '';
 
 	/**
 	 * режим дебага
 	 * @var bool
 	 */
-	public bool $debug;
+	public bool $debug = false;
 
 	/**
 	 * описание структур таблиц
 	 * @var array
 	 */
-	public array $tablesSchema;
+	public array $tablesSchema =[];
 
 	/**
 	 * подключение к базе
