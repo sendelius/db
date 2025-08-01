@@ -1,0 +1,19 @@
+{
+    "name": "sendelius/db",
+    "authors": [
+        {
+            "name": "Sendelius",
+            "email": "root@sendelius.ru",
+            "homepage": "https://sendelius.ru"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sendelius\\Db\\": "src/"
+        }
+    }
+}
