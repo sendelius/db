@@ -524,7 +524,7 @@ class Query {
 			case 'LIKE':
 			case 'NOT LIKE':
 			case 'REGEXP':
-				$where = $this->shield($key) . ' Query.php' . $cond . ' \'' . $value . '\'';
+				$where = $this->shield($key) . ' ' . $cond . ' \'' . $value . '\'';
 				break;
 			case 'CUSTOM':
 				$where = $key;
@@ -552,7 +552,7 @@ class Query {
 				break;
 			default:
 				$newKey = preg_replace('/^/', ':where_' . self::$whereKeyIndex . '_', $key, 1);
-				$where = $this->shield($key) . ' Query.php' . $cond . ' ' . $newKey;
+				$where = $this->shield($key) . ' ' . $cond . ' ' . $newKey;
 				$this->setData([$newKey => $value]);
 				self::$whereKeyIndex++;
 				break;
