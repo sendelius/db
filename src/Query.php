@@ -119,7 +119,7 @@ class Query {
 		$this->backtraceLine = $backtraceLine;
 		$this->debug = $debug;
 		$this->driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
-		$this->sld = ($this->driver=='pgsql') ? '"' : '`';
+		$this->sld = ($this->driver == 'pgsql') ? '"' : '`';
 	}
 
 	private function shield(string $name): string {
@@ -305,7 +305,7 @@ class Query {
 	 * @return array
 	 */
 	public function getAll(array|string $columns = [], array $as = [], bool $asReverse = false): array {
-		$result = $this->sendQuery('SELECT ' . $this->prepareColumns($columns,$as,$asReverse) . ' FROM ' . $this->tableName);
+		$result = $this->sendQuery('SELECT ' . $this->prepareColumns($columns, $as, $asReverse) . ' FROM ' . $this->tableName);
 		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 		return array_map([$this, 'prepareResult'], $rows);
 	}
@@ -318,7 +318,7 @@ class Query {
 	 * @return mixed
 	 */
 	public function get(array|string $columns = [], array $as = [], bool $asReverse = false): mixed {
-		$result = $this->sendQuery('SELECT ' . $this->prepareColumns($columns,$as,$asReverse) . ' FROM ' . $this->tableName);
+		$result = $this->sendQuery('SELECT ' . $this->prepareColumns($columns, $as, $asReverse) . ' FROM ' . $this->tableName);
 		$row = $result->fetch(PDO::FETCH_ASSOC);
 		return $row ? $this->prepareResult($row) : null;
 	}
@@ -335,7 +335,7 @@ class Query {
 			$this->setData($newValues);
 			if ($this->driver === 'pgsql') {
 				$query = sprintf("INSERT INTO %s (%s) VALUES (%s) RETURNING id", $this->tableName, $this->shield(implode($this->shield(','), $aKeys)), implode(',', array_keys($newValues)));
-			}else{
+			} else {
 				$query = sprintf("INSERT INTO %s (%s) VALUE (%s)", $this->tableName, $this->shield(implode($this->shield(','), $aKeys)), implode(',', array_keys($newValues)));
 			}
 			$this->sendQuery($query);
@@ -352,7 +352,7 @@ class Query {
 	 */
 	public function update(array $values = []): bool|PDOStatement {
 		if (count($values) > 0) {
-			if($this->driver === 'pgsql'){
+			if ($this->driver === 'pgsql') {
 				foreach ($this->tableSchema as $column => $definition) {
 					if (!array_key_exists($column, $values) && strlen((string)$definition['on_update'])) {
 						$values[$column] = $definition['on_update'];
@@ -364,7 +364,7 @@ class Query {
 			$newValues = array_combine(preg_replace('/^/', ':', $aKeys, 1), $values);
 			$newKeys = array_combine($aKeys, preg_replace('/^/', ':', $aKeys, 1));
 			$set = [];
-			foreach ($newKeys as $k => $v) $set[] = $this->shield($k)." = $v";
+			foreach ($newKeys as $k => $v) $set[] = $this->shield($k) . " = $v";
 			$this->setData($newValues);
 			return $this->sendQuery("UPDATE " . $this->tableName . " SET " . implode(', ', $set));
 		} else return false;
@@ -435,8 +435,8 @@ class Query {
 					$i = 1;
 					$keyFirst = false;
 					foreach ($newKeys as $k => $v) {
-						if ($i == 1) $keyFirst = "WHERE ".$this->shield($k)." = $v";
-						else $set[] = $this->shield($k)." = $v";
+						if ($i == 1) $keyFirst = "WHERE " . $this->shield($k) . " = $v";
+						else $set[] = $this->shield($k) . " = $v";
 						$i++;
 					}
 					if ($keyFirst and count($set) > 0) {
@@ -476,7 +476,7 @@ class Query {
 	 */
 	private function genWhere(mixed $key, string $cond, mixed $value = ''): string {
 		$where = '';
-		$value = $this->prepareValues($key,$value);
+		$value = $this->prepareValues($key, $value);
 		switch (strtoupper($cond)) {
 			case 'IN':
 				if (is_array($value) and count($value) > 0) {
@@ -572,14 +572,14 @@ class Query {
 			}
 			switch (strtolower($this->tableSchema[$key]['type'])) {
 				case 'boolean':
-					$row[$key] = (bool) $value;
+					$row[$key] = (bool)$value;
 					break;
 				case 'json':
 					$row[$key] = (json_validate((string)$value)) ? json_decode((string)$value, true) : [];
 					break;
 				case 'int':
 				case 'bigint':
-					$row[$key] = (int) $value;
+					$row[$key] = (int)$value;
 					break;
 				// можно добавить другие типы по необходимости
 			}
@@ -593,10 +593,10 @@ class Query {
 	 * @param mixed $value
 	 * @return mixed
 	 */
-	private function prepareValues(mixed $key,mixed $value): mixed {
-		if(array_key_exists($key,$this->tableSchema) and $this->tableSchema[$key]['type']=='boolean'){
-			if(is_bool($value) and $this->driver !== 'pgsql') $value = ($value) ? 1 : 0;
-			if(!is_bool($value) and $this->driver === 'pgsql') $value = (bool)$value;
+	private function prepareValues(mixed $key, mixed $value): mixed {
+		if (array_key_exists($key, $this->tableSchema) and $this->tableSchema[$key]['type'] == 'boolean') {
+			if (is_bool($value) and $this->driver !== 'pgsql') $value = ($value) ? 1 : 0;
+			if (!is_bool($value) and $this->driver === 'pgsql') $value = (bool)$value;
 		}
 		return $value;
 	}
@@ -617,7 +617,7 @@ class Query {
 				$columnsString = ($asReverse) ? str_replace($this->sld . $asKey . $this->sld, $this->sld . $asKeyReplace . $this->sld . ' AS ' . $this->sld . $asKey . $this->sld, $columnsString) : str_replace($this->sld . $asKey . $this->sld, $this->sld . $asKey . $this->sld . ' AS ' . $this->sld . $asKeyReplace . $this->sld, $columnsString);
 			}
 		}
-		return (string) $columnsString;
+		return (string)$columnsString;
 	}
 
 	/**
