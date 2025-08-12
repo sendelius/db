@@ -2,24 +2,25 @@
 
 namespace Sendelius\Db;
 
+use Exception;
 use PDO;
 use PDOStatement;
 
 class SPDO extends PDO {
 	/**
-	 * массив запросов для дебага
+	 * Массив запросов для дебага
 	 * @var array
 	 */
 	public static array $queries = [];
 
 	/**
-	 * результат запроса
+	 * Результат запроса
 	 * @var bool
 	 */
 	public bool $result = false;
 
 	/**
-	 * запрос в базу
+	 * Запрос в базу
 	 * @param string $sql
 	 * @param array $data
 	 * @param string $backtraceFile
@@ -34,7 +35,7 @@ class SPDO extends PDO {
 			$sqlObj = parent::prepare($sql);
 			$this->result = $sqlObj->execute($data);
 			$time = microtime(true) - $start;
-		} catch (\Exception $exception) {
+		} catch (Exception $exception) {
 			trigger_error("Ошибка базы данных: " . $exception->getMessage(), E_USER_WARNING);
 		}
 		if ($debug) {

@@ -7,103 +7,103 @@ use PDOStatement;
 
 class Query {
 	/**
-	 * хранилище экземпляра класса SPDO
+	 * Хранилище экземпляра класса SPDO
 	 * @var SPDO
 	 */
 	private SPDO $pdo;
 
 	/**
-	 * таблица для запроса
+	 * Таблица для запроса
 	 * @var string
 	 */
 	private string $tableName;
 
 	/**
-	 * описание структуры таблицы
+	 * Описание структуры таблицы
 	 * @var array
 	 */
 	private array $tableSchema;
 
 	/**
-	 * хранилище данных
+	 * Хранилище данных
 	 * @var array
 	 */
 	private array $data = [];
 
 	/**
-	 * содержимое оператора join
+	 * Содержимое оператора join
 	 * @var array
 	 */
 	private array $join = [];
 
 	/**
-	 * содержимое оператора WHERE
+	 * Содержимое оператора WHERE
 	 * @var array
 	 */
 	private array $where = [];
 
 	/**
-	 * содержимое оператора LIMIT
+	 * Содержимое оператора LIMIT
 	 * @var string
 	 */
 	private string $limit = '';
 
 	/**
-	 * содержимое оператора ORDER
+	 * Содержимое оператора ORDER
 	 * @var string
 	 */
 	private string $order = '';
 
 	/**
-	 * содержимое оператора GROUP
+	 * Содержимое оператора GROUP
 	 * @var string
 	 */
 	private string $group = '';
 
 	/**
-	 * содержимое оператора HAVING
+	 * Содержимое оператора HAVING
 	 * @var string
 	 */
 	private string $having = '';
 
 	/**
-	 * индекс ключа данных для оператора WHERE
+	 * Индекс ключа данных для оператора WHERE
 	 * @var int
 	 */
 	private static int $whereKeyIndex = 0;
 
 	/**
-	 * файл вызова
+	 * Файл вызова
 	 * @var string
 	 */
 	private string $backtraceFile;
 
 	/**
-	 * строка вызова
+	 * Строка вызова
 	 * @var int
 	 */
 	private int $backtraceLine;
 
 	/**
-	 * режим дебага
+	 * Режим дебага
 	 * @var bool
 	 */
 	public bool $debug;
 
 	/**
-	 * текущий драйвер соединения
+	 * Текущий драйвер соединения
 	 * @var string|mixed
 	 */
 	private string $driver;
 
 	/**
-	 * экранирующий символ
+	 * Экранирующий символ
 	 * @var string
 	 */
 	private string $sld;
 
 	/**
-	 * конструктор класса
+	 * Конструктор класса
 	 * @param SPDO $pdo
 	 * @param string $tableName
 	 * @param array $tableSchema
@@ -122,12 +122,17 @@ class Query {
 		$this->sld = ($this->driver == 'pgsql') ? '"' : '`';
 	}
 
+	/**
+	 * Экранирование названий колонок
+	 * @param string $name
+	 * @return string
+	 */
 	private function shield(string $name): string {
 		return $this->sld . $name . $this->sld;
 	}
 
 	/**
-	 * оператор JOIN
+	 * Оператор JOIN
 	 * @param string $type
 	 * @param string $table
 	 * @param array $on
@@ -144,7 +149,7 @@ class Query {
 	}
 
 	/**
-	 * оператор HAVING
+	 * Оператор HAVING
 	 * @param string $key
 	 * @param string $cond
 	 * @param string $value
@@ -156,7 +161,7 @@ class Query {
 	}
 
 	/**
-	 * оператор WHERE
+	 * Оператор WHERE
 	 * @param mixed $key
 	 * @param string $cond
 	 * @param mixed $value
@@ -176,7 +181,7 @@ class Query {
 	}
 
 	/**
-	 * множественный оператор WHERE
+	 * Множественный оператор WHERE
 	 * @param array $cond
 	 * @param bool $group
 	 * @param string $endOperator
@@ -211,7 +216,7 @@ class Query {
 	}
 
 	/**
-	 * поиск по базе данных
+	 * Поиск по базе данных
 	 * @param array $columns
 	 * @param string $search
 	 * @param bool $explode
@@ -234,7 +239,7 @@ class Query {
 	}
 
 	/**
-	 * выбор количесва строк в таблице
+	 * Выбор количества строк в таблице
 	 * @param string $key
 	 * @return int
 	 */
@@ -245,7 +250,7 @@ class Query {
 	}
 
 	/**
-	 * группировка выборки по столбцу
+	 * Группировка выборки по столбцу
 	 * @param string $column
 	 * @return $this
 	 */
@@ -255,7 +260,7 @@ class Query {
 	}
 
 	/**
-	 * установка лимита выборки
+	 * Установка лимита выборки
 	 * @param int $offset
 	 * @param int $rows
 	 * @return $this
@@ -272,7 +277,7 @@ class Query {
 	}
 
 	/**
-	 * сортировка
+	 * Сортировка
 	 * @param string $column
 	 * @param string $order ASC or DESC
 	 * @return $this
@@ -288,7 +293,7 @@ class Query {
 	}
 
 	/**
-	 * рандомная сортировка
+	 * Случайная сортировка
 	 * @return $this
 	 */
 	public function rand(): Query {
@@ -298,7 +303,7 @@ class Query {
 	}
 
 	/**
-	 * выборка нескольких строк
+	 * Выборка нескольких строк
 	 * @param array|string $columns
 	 * @param array $as
 	 * @param bool $asReverse
@@ -311,20 +316,20 @@ class Query {
 	}
 
 	/**
-	 * выборка одной строки
+	 * Выборка одной строки
 	 * @param array|string $columns
 	 * @param array $as
 	 * @param bool $asReverse
-	 * @return mixed
+	 * @return array|null
 	 */
-	public function get(array|string $columns = [], array $as = [], bool $asReverse = false): mixed {
+	public function get(array|string $columns = [], array $as = [], bool $asReverse = false): ?array {
 		$result = $this->sendQuery('SELECT ' . $this->prepareColumns($columns, $as, $asReverse) . ' FROM ' . $this->tableName);
 		$row = $result->fetch(PDO::FETCH_ASSOC);
 		return $row ? $this->prepareResult($row) : null;
 	}
 
 	/**
-	 * создание записей в базе
+	 * Создание записей в базе
 	 * @param array $values
 	 * @return false|string
 	 */
@@ -346,7 +351,7 @@ class Query {
 	}
 
 	/**
-	 * обновление записей в базе
+	 * Обновление записей в базе
 	 * @param array $values
 	 * @return bool|PDOStatement
 	 */
@@ -371,7 +376,7 @@ class Query {
 	}
 
 	/**
-	 * удаление записей из базы данных
+	 * Удаление записей из базы данных
 	 * @return bool|PDOStatement
 	 */
 	public function delete(): bool|PDOStatement {
@@ -379,7 +384,7 @@ class Query {
 	}
 
 	/**
-	 * отчистка таблицы
+	 * Отчистка таблицы
 	 * @return bool|PDOStatement
 	 */
 	public function truncate(): bool|PDOStatement {
@@ -387,7 +392,7 @@ class Query {
 	}
 
 	/**
-	 * множественное создание записей
+	 * Множественное создание записей
 	 * @param array $values
 	 * @param int $limit
 	 * @return bool
@@ -417,7 +422,7 @@ class Query {
 	}
 
 	/**
-	 * множественное обновление записей
+	 * Множественное обновление записей
 	 * @param array $values
 	 * @param int $limit
 	 * @return bool
@@ -451,7 +456,7 @@ class Query {
 	}
 
 	/**
-	 * произвольный sql запрос
+	 * Произвольный sql запрос
 	 * @param string $query
 	 * @return bool|PDOStatement
 	 */
@@ -460,7 +465,7 @@ class Query {
 	}
 
 	/**
-	 * добавление данных в хранилище
+	 * Добавление данных в хранилище
 	 * @param array $data
 	 */
 	private function setData(array $data = []): void {
@@ -468,7 +473,7 @@ class Query {
 	}
 
 	/**
-	 * генерация содержимого оператора WHERE
+	 * Генерация содержимого оператора WHERE
 	 * @param mixed $key
 	 * @param string $cond
 	 * @param mixed $value
@@ -561,7 +566,7 @@ class Query {
 	}
 
 	/**
-	 * форматирование данных под их типы
+	 * Форматирование данных под их типы
 	 * @param array $row
 	 * @return array
 	 */
@@ -588,7 +593,7 @@ class Query {
 	}
 
 	/**
-	 * подготовка значений по схеме таблицы
+	 * Подготовка значений по схеме таблицы
 	 * @param mixed $key
 	 * @param mixed $value
 	 * @return mixed
@@ -602,7 +607,7 @@ class Query {
 	}
 
 	/**
-	 * подготовка данных по колонкам для выборки
+	 * Подготовка данных по колонкам для выборки
 	 * @param array|string $columns
 	 * @param array $as
 	 * @param bool $asReverse
@@ -621,7 +626,7 @@ class Query {
 	}
 
 	/**
-	 * отправка запроса
+	 * Отправка запроса
 	 * @param string $first
 	 * @return PDOStatement|bool
 	 */

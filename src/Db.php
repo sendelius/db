@@ -11,31 +11,31 @@ use PDOException;
  */
 class Db {
 	/**
-	 * хранилище экземпляра класса SPDO
+	 * Хранилище экземпляра класса SPDO
 	 * @var SPDO
 	 */
 	public SPDO $pdo;
 
 	/**
-	 * префикс таблиц
+	 * Префикс таблиц
 	 * @var string
 	 */
 	public string $tablePrefix = '';
 
 	/**
-	 * режим дебага
+	 * Режим дебага
 	 * @var bool
 	 */
 	public bool $debug = false;
 
 	/**
-	 * описание структур таблиц
+	 * Описание структур таблиц
 	 * @var array
 	 */
-	public array $tablesSchema =[];
+	public array $tablesSchema = [];
 
 	/**
-	 * подключение к базе
+	 * Подключение к базе
 	 * @param string $name
 	 * @param string $host
 	 * @param string $user
@@ -58,7 +58,7 @@ class Db {
 	}
 
 	/**
-	 * выбор таблицы
+	 * Выбор таблицы
 	 * @param string $tableName
 	 * @return Query
 	 */
@@ -83,7 +83,7 @@ class Db {
 	}
 
 	/**
-	 * регистрация таблицы в системе
+	 * Регистрация таблицы в системе
 	 * @param string|array $tables
 	 * @return void
 	 */
@@ -100,8 +100,10 @@ class Db {
 						'auto_increment' => false,
 						'primary' => false,
 						'unique' => false,
+						'index' => false,
+						'unsigned' => false,
 						'default' => '',
-						'on_update' => '',
+						'on_update' => ''
 					];
 					foreach ($schema as $key => $item) {
 						$schema[$key] = $this->attrMerge($allowParams, $item);
@@ -113,7 +115,19 @@ class Db {
 	}
 
 	/**
-	 * функция слияния массивов с настройками
+	 * Миграция таблиц
+	 * @param bool $safeMode
+	 * @return void
+	 */
+	public function migrate(bool $safeMode = true): void {
+		$migrate = new Migrate();
+		$migrate->tablesSchema = $this->tablesSchema;
+		$migrate->pdo = $this->pdo;
+		$migrate->start($safeMode);
+	}
+
+	/**
+	 * Функция слияния массивов с настройками
 	 * @param array $defaults
 	 * @param array $input
 	 * @return array
