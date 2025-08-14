@@ -231,6 +231,10 @@ class Migrate {
 	 */
 	private function buildColumnSql(string $name, array $def): string {
 		$type = strtoupper($def['type']);
+		if ($type == 'BOOLEAN') {
+			$type = 'TINYINT';
+			$def['length'] = 1;
+		}
 		if (!empty($def['length'])) {
 			$type .= "({$def['length']})";
 		}
